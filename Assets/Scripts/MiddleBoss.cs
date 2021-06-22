@@ -9,6 +9,7 @@ public class MiddleBoss : MonoBehaviour
     [SerializeField] private GameObject[] waterSlice = null;
     [SerializeField] private SpriteRenderer[] beamSpriteRenderer = null;
     [SerializeField] private Collider2D[] beamCol = null;
+    new private AudioSource audio = null;
     private GameManager gameManager = null;
     private SpriteRenderer spriteRenderer = null;
     //private Animator ani = null;
@@ -16,6 +17,7 @@ public class MiddleBoss : MonoBehaviour
     private bool isPattern = false;
     void Start()
     {
+        audio = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position = new Vector2(gameManager.MaxPos.x * -dir, 2.5f);
@@ -142,9 +144,11 @@ public class MiddleBoss : MonoBehaviour
             waterSlice[0].SetActive(false);
             waterSlice[1].SetActive(false);
             yield return new WaitForSeconds(0.2f);
+            audio.Play();
             waterSlice[0].SetActive(true);
             waterSlice[1].SetActive(true);
             yield return new WaitForSeconds(1f);
+            audio.Pause();
             waterSlice[0].SetActive(false);
             waterSlice[1].SetActive(false);
         }

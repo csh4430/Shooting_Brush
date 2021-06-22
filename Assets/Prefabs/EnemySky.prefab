@@ -74,10 +74,11 @@ GameObject:
   - component: {fileID: 6700159893428500201}
   - component: {fileID: 6700159893428500200}
   - component: {fileID: 6700159893428500205}
-  - component: {fileID: 9027146796144662533}
+  - component: {fileID: 225995082933902901}
+  - component: {fileID: 8305176824936711378}
   m_Layer: 6
   m_Name: EnemySky
-  m_TagString: Enemy
+  m_TagString: Sky
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -214,7 +215,103 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &9027146796144662533
+--- !u!82 &225995082933902901
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6700159893428500215}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 552db8d029249df46a7c5825eab3d4e3, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.15
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8305176824936711378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,18 +320,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6700159893428500215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f4d7efc0dc96ee48ad8eea5c90111d8, type: 3}
+  m_Script: {fileID: 11500000, guid: f43c8d85b8cd6d54589cdce1b37b8031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationClip:
+  - {fileID: 7400000, guid: 133d67baab0b4944186dbcac9d8ff005, type: 2}
+  - {fileID: 7400000, guid: ed306bcc7f9ce1844aae60892adda265, type: 2}
+  - {fileID: 7400000, guid: 910070df6f7a03e479af54f83cfd8e4f, type: 2}
+  - {fileID: 7400000, guid: 5cd45b01b8a93374c87706794ab28e78, type: 2}
+  speed: 0.8
+  score: 250
   bulletPref: {fileID: 6686452777850198425, guid: 2c3175a0e5afcb74189812317c69e378, type: 3}
   bulletPos:
   - {fileID: 8976933852915957920}
   - {fileID: 9219254527004833672}
-  animationClip:
-  - {fileID: 7400000, guid: ea74691ce8c32b54e9048e7566fc3216, type: 2}
-  - {fileID: 7400000, guid: 58d00b5986dbcb342b3a00d2104a0a99, type: 2}
-  - {fileID: 7400000, guid: 33be8c1f525663c4aafd076335c10e7a, type: 2}
-  - {fileID: 7400000, guid: 5cd45b01b8a93374c87706794ab28e78, type: 2}
-  speed: 0.8
-  score: 250
-  mode: 1

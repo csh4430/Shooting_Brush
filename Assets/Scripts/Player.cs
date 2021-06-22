@@ -12,9 +12,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed = 0;
     [SerializeField] private RuntimeAnimatorController[] aniCon = null;
     [SerializeField] private GameObject boss = null;
+    [SerializeField] private AudioClip[] playerClips = null;
     private Animator animator = null;
     private GameManager gameManager = null;
     private SpriteRenderer spriteRenderer = null;
+    new private AudioSource audio = null;
     private IEnumerator fire = null;
     private bool isDead = false;
     private bool isSlicing = false;
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audio = GetComponent<AudioSource>();
 
         fire = Fire();
         StartCoroutine(fire);
@@ -126,22 +129,31 @@ public class Player : MonoBehaviour
         while (true)
         {
             animator.Play("Fire");
-            if(mode == 0)
+            if (!isSlicing || !isDead)
             {
-                yield return new WaitForSeconds(0.42f);
-
-                animator.Play("Idle");
-                for (int i = 0; i < 3; i++)
+                if (mode == 0)
                 {
-                    gameManager.Pooling(bulletPref[0], bulletPos.position, bulletPos.rotation);
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.42f);
+
+                    animator.Play("Idle");
+
+                    for (int i = 0; i < 3; i++)
+                    {
+
+                        audio.clip = playerClips[0];
+                        audio.Play();
+                        gameManager.Pooling(bulletPref[0], bulletPos.position, bulletPos.rotation);
+                        yield return new WaitForSeconds(0.1f);
+                    }
                 }
-            }
-            else if(mode == 1)
-            {
-                gameManager.Pooling(bulletPref[0], bulletPos.position, bulletPos.rotation);
-                yield return new WaitForSeconds(0.15f);
-                animator.Play("Idle");
+                else if (mode == 1)
+                {
+                    audio.clip = playerClips[0];
+                    audio.Play();
+                    gameManager.Pooling(bulletPref[0], bulletPos.position, bulletPos.rotation);
+                    yield return new WaitForSeconds(0.15f);
+                    animator.Play("Idle");
+                }
             }
         }
     }
@@ -153,8 +165,9 @@ public class Player : MonoBehaviour
         isSlicing = true;
         StopCoroutine(fire);
         isFiring = false;
+        audio.clip = playerClips[1];
+        audio.Play();
         GameObject aa = gameManager.Pooling(bulletPref[1], bulletPos.position, bulletPos.rotation);
-        StartCoroutine(aa.GetComponent<Bullet>().SetSpeed(mode == 1 ? 10 : 15));
         aa.GetComponent<Animator>().Play("Drawing");
         animator.Play("Slice");
         yield return new WaitForSeconds(mode == 0 ? 0.7f : 0.3f);
@@ -187,6 +200,8 @@ public class Player : MonoBehaviour
         isDead = true;
         isFiring = false;
         animator.Play("Dead");
+        audio.clip = playerClips[2];
+        audio.Play();
         StopCoroutine(fire);
         scoreText.color = new Color(0.7f, 0, 0, 1);
         for(int i = 0; i < 5; i++)

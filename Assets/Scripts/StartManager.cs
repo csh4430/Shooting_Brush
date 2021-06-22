@@ -9,6 +9,7 @@ public class StartManager : MonoBehaviour
     [SerializeField] private Font[] fonts = null;
     [SerializeField] private Canvas menu = null;
     [SerializeField] private Image mainTextImage = null;
+    [SerializeField] private Image soundButtonImage = null;
     [SerializeField] private Button languageButton = null;
     [SerializeField] private Text changeButtonText = null;
     [SerializeField] private Text languageText = null;
@@ -23,23 +24,35 @@ public class StartManager : MonoBehaviour
     [SerializeField] private Sprite[] characterSprite = null;
     [SerializeField] private Sprite[] flagSprite = null;
     [SerializeField] private Sprite[] mainTextSprite = null;
+    [SerializeField] private Sprite[] soundSprite = null;
+    new private AudioSource audio = null;
     private Text dictionaryName = null;
     private Text dictionaryExplanation = null;
     private Text dictionaryStatus = null;
     private int languageCount = 0;
     private int selectedCount = 0;
     private int dictionaryType = 0;
+    private int sound = 1;
     private Image dictionaryCharacter = null;
 
 
     private void Awake()
     {
         languageCount = PlayerPrefs.GetInt("LANGUAGE");
+        sound = PlayerPrefs.GetInt("SOUND", 1);
+        if (sound == -1) soundButtonImage.sprite = soundSprite[1];
+        else soundButtonImage.sprite = soundSprite[0];
         dictionaryName = enemyDictionaryObject.transform.Find("Name").GetComponent<Text>();
         dictionaryExplanation = enemyDictionaryObject.transform.Find("Explanation").GetComponent<Text>();
         dictionaryStatus = enemyDictionaryObject.transform.Find("Status").GetComponent<Text>();
         dictionaryCharacter = enemyDictionaryObject.transform.Find("Character").GetComponent<Image>();
+        audio = GetComponent<AudioSource>();
         SetMainText();
+    }
+
+    private void Update()
+    {
+        audio.enabled = sound == 1 ? true : false;
     }
 
     public void Game()
@@ -225,8 +238,8 @@ public class StartManager : MonoBehaviour
                     changeButtonText.text = "渡欧";
                 enemyButtonText[0].text = "かわ";
                 enemyButtonText[1].text = "あま";
-                enemyButtonText[2].text = "キル";
-                enemyButtonText[3].text = "ち";
+                enemyButtonText[2].text = "きる";
+                enemyButtonText[3].text = "せん";
                 doSelectText.text = "クリックして。";
                 break;
         }
@@ -276,7 +289,7 @@ public class StartManager : MonoBehaviour
                         break;
                     case 1:
                         dictionaryName.text = "Sky";
-                        dictionaryExplanation.text = "Moving Horizontally, Spread The Bullet Roundly";
+                        dictionaryExplanation.text = "Moving To Left, Spread The Bullet Roundly";
                         dictionaryStatus.text = "Speed: 0.8, HP: 4, Score: 250p";
                         break;
                     case 2:
@@ -301,22 +314,22 @@ public class StartManager : MonoBehaviour
                 {
                     case 0:
                         dictionaryName.text = "かわ";
-                        dictionaryExplanation.text = "下に動く、画がすくない。";
+                        dictionaryExplanation.text = "下に動いて、画が少ない。";
                         dictionaryStatus.text = "速度: 2, 体力: 3,　点数: 100点";
                         break;
                     case 1:
                         dictionaryName.text = "あま";
-                        dictionaryExplanation.text = "左右に動く、弾丸を丸く発射する";
+                        dictionaryExplanation.text = "左に動くって、弾丸を丸く発射する。";
                         dictionaryStatus.text = "速度: 0.8, 体力: 4, 点数: 250点";
                         break;
                     case 2:
-                        dictionaryName.text = "キル";
-                        dictionaryExplanation.text = "水大砲を使かう、多い体力";
+                        dictionaryName.text = "きる";
+                        dictionaryExplanation.text = "水大砲を使かう、多い体力。";
                         dictionaryStatus.text = "不動 , 体力: 50, 点数: 当たる瞬間 10点";
                         break;
                     case 3:
-                        dictionaryName.text = "ち";
-                        dictionaryExplanation.text = "大きい、無死";
+                        dictionaryName.text = "せん";
+                        dictionaryExplanation.text = "大きい、不死";
                         dictionaryStatus.text = "不動 , 体力: 200, 点数: 当たる瞬間 10点";
                         break;
                 }
@@ -336,7 +349,7 @@ public class StartManager : MonoBehaviour
                 break;
             case 1:
                 itemText[0].text = "Ink Bomb";
-                itemText[1].text = "Destroy All Except Boss";
+                itemText[1].text = "Destroy All, Except Boss";
                 itemText[2].text = "Ink Stone";
                 itemText[3].text = "Get Slower By Getting Ink, But Get Stronger";
                 break;
@@ -344,10 +357,17 @@ public class StartManager : MonoBehaviour
                 for(int i = 0; i < 4; i++)
                     itemText[i].font = fonts[1];
                 itemText[0].text = "墨汁爆弾";
-                itemText[1].text = "ボス以外の全てを破壊";
+                itemText[1].text = "ボス以外の全てを破壊。";
                 itemText[2].text = "硯";
-                itemText[3].text = "重くなって遅くになれる、でも強くなる";
+                itemText[3].text = "重くなって遅くになれる、でも強くなる。";
                 break;
         }
+    }
+
+    public void TurnSound()
+    {
+        PlayerPrefs.SetInt("SOUND", sound *= -1);
+        if (sound == -1) soundButtonImage.sprite = soundSprite[1];
+        else soundButtonImage.sprite = soundSprite[0];
     }
 }

@@ -11,6 +11,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private Image hpBar = null;
     [SerializeField] private Canvas status = null;
     [SerializeField] private Transform playerPos = null;
+    [SerializeField] private AudioClip[] clips = null;
+    new private AudioSource audio = null;
     private float life = 1;
     private SpriteRenderer spriteRenderer = null;
     private GameManager gameManager = null;
@@ -23,6 +25,7 @@ public class Boss : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameManager = FindObjectOfType<GameManager>();
+        audio = GetComponent<AudioSource>();
         spinBigBullet = SpinBigBullet();
         fire = Fire();
     }
@@ -51,6 +54,8 @@ public class Boss : MonoBehaviour
             if(collision.CompareTag("Bullet"))
                 gameManager.Despawn(collision.gameObject);
             life -= collision.CompareTag("Bullet") ? 0.005f : 0.01f;
+            //audio.clip = clips[1];
+            //audio.Play();
             gameManager.AddScore(10);
             spriteRenderer.color = new Color(life, life, life, 1);
             hpBar.color = new Color(life, life, life, 1);
@@ -113,13 +118,17 @@ public class Boss : MonoBehaviour
 
         while (true)
         {
+            audio.clip = clips[0];
+            audio.Play();
             for (int i = 0; i < 25; i++)
             {
                 gameManager.Pooling(bulletPref[1], bulletPos[2].position + new Vector3(0, 0, 1), bulletPos[2].rotation);
                 bulletPos[2].Rotate(Vector3.forward * 14.4f);
             }
+
             bulletPos[3].Rotate(Vector3.forward * 8 * dir);
             yield return new WaitForSeconds(0.30f);
+            audio.Pause();
         }
     }
     private IEnumerator RandomBigBullet()
@@ -127,13 +136,17 @@ public class Boss : MonoBehaviour
         int pos;
         for(int i = 0; i < 8; i++)
         {
+            audio.clip = clips[1];
+            audio.Play();
             pos = Random.Range(0, 4);
             for(int j = 0; j < 20; j++)
             {
                 gameManager.Pooling(bulletPref[1], RandomBulletPos[pos].position + new Vector3(0, 0, 1), RandomBulletPos[pos].rotation);
                 RandomBulletPos[pos].Rotate(Vector3.forward * 18);
             }
+
             yield return new WaitForSeconds(0.7f);
+            audio.Pause();
         }
     }
     private IEnumerator Fire()
@@ -149,37 +162,4 @@ public class Boss : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
     }
-
-    //private GameObject InstantiateOrPool(int count , int pos)
-    //{
-    //    GameObject result = null;
-    //    int i = 0;
-    //    if (gameManager.poolingManager.transform.childCount > 0)
-    //    {
-    //        while (true)
-    //        {
-    //            result = gameManager.poolingManager.transform.GetChild(i).gameObject;
-    //            i++;
-    //            if (result.layer == bulletPref[count].layer)
-    //                if (result.CompareTag(bulletPref[count].tag))
-    //                    break;
-    //            if (i >= gameManager.poolingManager.transform.childCount)
-    //            {
-    //                result = Instantiate(bulletPref[count], bulletPos[pos]);
-    //                break;
-    //            }
-    //        }
-    //        result.transform.position = bulletPos[pos].position + Vector3.forward;
-    //        result.transform.rotation = bulletPos[pos].rotation;
-    //        result.transform.SetParent(null);
-    //        result.SetActive(true);
-    //    }
-    //    else
-    //    {
-    //        result = Instantiate(bulletPref[count], bulletPos[pos].position + Vector3.forward, bulletPos[pos].rotation);
-    //        result.transform.position = bulletPos[pos].position + Vector3.forward;
-    //        result.transform.SetParent(null);
-    //    }
-    //    return result;
-    //}
 }

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1308867313524660982}
   - component: {fileID: 1505738859843622167}
-  - component: {fileID: 3320889505447584071}
   - component: {fileID: -8221040294558842999}
+  - component: {fileID: -4782635916664050167}
   m_Layer: 6
   m_Name: bullet 1
   m_TagString: BossBullet
@@ -84,19 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3320889505447584071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6686452777850198425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7c15e9da3ce534eb3cd7f324da4113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
 --- !u!60 &-8221040294558842999
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -132,3 +119,16 @@ PolygonCollider2D:
       - {x: 0.0647358, y: -0.15149762}
       - {x: 0.07091122, y: -0.036234263}
       - {x: 0.06368625, y: 0.14626431}
+--- !u!114 &-4782635916664050167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6686452777850198425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7eed05e042c935438168cbac9efb43f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3

@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 5712798537984177899}
   - component: {fileID: 5712798537984177898}
   - component: {fileID: 5712798537984177900}
-  - component: {fileID: 5712798537984177901}
   - component: {fileID: 104755375831398412}
   - component: {fileID: -4670381541604000075}
   - component: {fileID: 1197858965902489386}
+  - component: {fileID: 7423263843253275035}
   m_Layer: 6
   m_Name: EnemyRiver
-  m_TagString: Enemy
+  m_TagString: River
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,30 +113,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
---- !u!114 &5712798537984177901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5712798537984177897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f4d7efc0dc96ee48ad8eea5c90111d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPref: {fileID: 6686452777850198425, guid: 90e089f15eda5904ca782cf1b4ffa3c7, type: 3}
-  bulletPos:
-  - {fileID: 0}
-  - {fileID: 0}
-  animationClip:
-  - {fileID: 7400000, guid: ea74691ce8c32b54e9048e7566fc3216, type: 2}
-  - {fileID: 7400000, guid: 58d00b5986dbcb342b3a00d2104a0a99, type: 2}
-  - {fileID: 7400000, guid: 33be8c1f525663c4aafd076335c10e7a, type: 2}
-  - {fileID: 7400000, guid: 5cd45b01b8a93374c87706794ab28e78, type: 2}
-  speed: 2
-  score: 100
-  mode: 0
 --- !u!95 &104755375831398412
 Animator:
   serializedVersion: 3
@@ -187,9 +163,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7dca7bb68cfdc3b449f68553ddeaa864, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 552db8d029249df46a7c5825eab3d4e3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -273,3 +249,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7423263843253275035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5712798537984177897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721d2b22f41ea7c419a2a33906fb2bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationClip:
+  - {fileID: 7400000, guid: ea74691ce8c32b54e9048e7566fc3216, type: 2}
+  - {fileID: 7400000, guid: 58d00b5986dbcb342b3a00d2104a0a99, type: 2}
+  - {fileID: 7400000, guid: 33be8c1f525663c4aafd076335c10e7a, type: 2}
+  speed: 2
+  score: 100

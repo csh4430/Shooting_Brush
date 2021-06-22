@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2212352532802512213}
   - component: {fileID: 2212352532802512210}
   - component: {fileID: 2212352532802512211}
-  - component: {fileID: 2155221351775801724}
   - component: {fileID: 1548537194583795920}
+  - component: {fileID: -6442274656775025773}
   m_Layer: 3
   m_Name: GameObject
   m_TagString: Slice
@@ -104,19 +104,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2155221351775801724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2212352532802512208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7c15e9da3ce534eb3cd7f324da4113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
 --- !u!60 &1548537194583795920
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -202,3 +189,16 @@ PolygonCollider2D:
       - {x: 0.19600001, y: -0.128}
       - {x: 0.192, y: -0.116000004}
       - {x: 0.172, y: -0.116000004}
+--- !u!114 &-6442274656775025773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212352532802512208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4634ca4b135c34face4abd51058b92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2

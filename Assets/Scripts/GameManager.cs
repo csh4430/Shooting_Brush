@@ -16,16 +16,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text[] texts = null;
     [SerializeField] private Text[] overTexts = null;
     [SerializeField] private Image mainOverImage = null;
+    [SerializeField] private Image soundButtonImage = null;
     [SerializeField] private Button languageButton = null;
     [SerializeField] private Text languageText = null;
     [SerializeField] private Text[] buttonOverText = null;
     [SerializeField] private Sprite[] mainOverSprite = null;
+    [SerializeField] private Sprite[] soundSprite = null;
     [SerializeField] private Sprite[] flagSprite = null;
     [SerializeField] private int life = 0;
     [SerializeField] private int boom = 0;
     private Animator animator = null;
 
     public PoolingManager poolingManager { get; private set; }
+    private AudioSource audioManager = null;
+    private AudioListener audioListener = null;
     private Shaking[] shaking = null;
     public Vector2 MaxPos { get; private set; }
     public Vector2 MinPos { get; private set; }
@@ -35,12 +39,17 @@ public class GameManager : MonoBehaviour
     private float scoreBoss = 0f;
     private float middleScoreBoss = 0f;
     public int bossCount { get; private set; }
+    private int sound = 1;
     public bool isBossSpawned { get; private set; }
     public bool isMenu { get; private set; }
+    private bool isBoom = false;
 
 
     void Start()
     {
+        sound = PlayerPrefs.GetInt("SOUND", 1);
+        audioListener = Camera.main.GetComponent<AudioListener>();
+        audioManager = GetComponent<AudioSource>();
         languageCount = PlayerPrefs.GetInt("LANGUAGE");
         poolingManager = FindObjectOfType<PoolingManager>();
         highScore = PlayerPrefs.GetFloat("HIGHSCORE");
@@ -57,6 +66,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 1)
+            audioListener.enabled = sound == 1 ? true : false;
+        else
+            audioListener.enabled = false;
         MaxPos = new Vector2(Camera.main.aspect * Camera.main.orthographicSize - 0.1f, Camera.main.orthographicSize - 1f);
         MinPos = new Vector2(-Camera.main.aspect * Camera.main.orthographicSize + 0.1f, -Camera.main.orthographicSize);
 
@@ -88,7 +101,7 @@ public class GameManager : MonoBehaviour
             else
                 yield return new WaitForSeconds(0.8f);
             if (!isBossSpawned)
-            Pooling(enemyPref[0] , new Vector2(Random.Range(MinPos.x, MaxPos.x), MaxPos.y + 0.1f), Quaternion.identity).GetComponent<Enemy>().Turn(); 
+            Pooling(enemyPref[0] , new Vector2(Random.Range(MinPos.x, MaxPos.x), MaxPos.y + 0.1f), Quaternion.identity); 
             
         }
     }
@@ -100,7 +113,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(7f);
             if (!isBossSpawned)
             if (score > 2000)
-                Pooling(enemyPref[1], new Vector2(MaxPos.x + 0.1f, Random.Range(2f, 3f)), Quaternion.identity).GetComponent<Enemy>().Turn();
+                Pooling(enemyPref[1], new Vector2(MaxPos.x + 0.1f, Random.Range(2f, 3f)), Quaternion.identity);
         }
     }
 
@@ -171,6 +184,8 @@ public class GameManager : MonoBehaviour
 
     public void OpenMenu()
     {
+        if (sound == -1) soundButtonImage.sprite = soundSprite[1];
+        else soundButtonImage.sprite = soundSprite[0];
         SetMenu();
         menus[0].enabled = true;
         isMenu = true;
@@ -198,6 +213,7 @@ public class GameManager : MonoBehaviour
     public void Dead()
     {
         life--;
+        audioListener.enabled = false;
         StartCoroutine(shaking[0].Shake());
         StartCoroutine(shaking[1].Shake());
         if (score - 150 > 0)
@@ -262,15 +278,18 @@ public class GameManager : MonoBehaviour
 
     public void Bomb()
     {
-        if (boom <= 0)
+        if (boom <= 0 || isBoom)
             return;
         StartCoroutine(Boom());
     }
 
     private IEnumerator Boom()
     {
+        isBoom = true;
+        boom--;
         transform.localScale = Vector3.one;
         animator.Play("Bomb");
+        audioManager.Play();
         yield return new WaitForSeconds(0.2f);
 
         transform.localScale = new Vector3(Camera.main.aspect * Camera.main.orthographicSize * 2 / 5, 1, 1);
@@ -278,21 +297,21 @@ public class GameManager : MonoBehaviour
 
         GameObject[] enemy = FindObjectsOfType(typeof(GameObject)) as GameObject[];
 
-        boom--;
 
         for (int i = 0; i < enemy.Length; i++)
         {
             if (enemy[i].layer == LayerMask.NameToLayer("Enemy"))
             {
                 Debug.Log(enemy[i]);
-                if (enemy[i].CompareTag("Enemy"))
-                    StartCoroutine(enemy[i].GetComponent<Enemy>().Dead());
+                if (enemy[i].CompareTag("River") || enemy[i].CompareTag("Sky"))
+                    StartCoroutine(enemy[i].GetComponent<EnemyRiver>().Dead());
                 else
                     Despawn(enemy[i]);
             }
         }
 
         animator.Play("Idle");
+        isBoom = false;
     }
 
     private void SpawningBoss()
@@ -345,5 +364,11 @@ public class GameManager : MonoBehaviour
                 languageText.text = "言語: ";
                 break;
         }
+    }
+    public void TurnSound()
+    {
+        PlayerPrefs.SetInt("SOUND", sound *= -1);
+        if (sound == -1) soundButtonImage.sprite = soundSprite[1];
+        else soundButtonImage.sprite = soundSprite[0];
     }
 }
