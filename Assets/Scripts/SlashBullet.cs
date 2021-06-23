@@ -8,6 +8,7 @@ public class SlashBullet : Bullet
     {
         base.OnEnable();
         StartCoroutine(SetSpeed(10));
+        animator.Play("Drawing");
     }
     public IEnumerator SetSpeed(int velocity)
     {

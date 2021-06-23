@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
             SpawningBoss();
         if (score >= middleScoreBoss + 3000 && !isBossSpawned)
             SpawnMiddleBoss();
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)) 
         {
             score += 2000;
         }

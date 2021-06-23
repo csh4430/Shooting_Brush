@@ -263,7 +263,7 @@ public class StartManager : MonoBehaviour
                         break;
                     case 1:
                         dictionaryName.text = "하늘 천";
-                        dictionaryExplanation.text = "좌우로 움직이며, 총알을 둥글게 뿌린다.";
+                        dictionaryExplanation.text = "왼쪽으로 움직이며, 총알을 둥글게 뿌린다.";
                         dictionaryStatus.text = "속도: 0.8, 체력: 4, 점수: 250점";
                         break;
                     case 2:

@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
         }
 
         if(!gameManager.isMenu)
-        if (DoubleClicked() && !isSlicing && !isTurning)
+        if (DoubleClicked() && !isSlicing && !isTurning && !isDead)
         {
             StartCoroutine(Slash());
         }
@@ -70,17 +70,17 @@ public class Player : MonoBehaviour
     private void Move()
     {
         if(Input.GetMouseButton(0))
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition/*Input.GetTouch(0).position*/);
+            mousePos = Camera.main.ScreenToWorldPoint(/*Input.mousePosition*/ Input.GetTouch(0).position);
 
-        if (/*Input.GetTouch(0).phase == TouchPhase.Began*/ Input.GetMouseButtonDown(0))
+        if (Input.GetTouch(0).phase == TouchPhase.Began /*Input.GetMouseButtonDown(0)*/)
         {
-            dis = (Vector2)transform.position - (mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition/*Input.GetTouch(0).position*/));
+            dis = (Vector2)transform.position - (mousePos = Camera.main.ScreenToWorldPoint(/*Input.mousePosition*/Input.GetTouch(0).position));
         }
 
-        //if(Input.GetTouch(0).phase == TouchPhase.Ended)
-        //{
-        //    dis = (Vector2)transform.position - (mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(1).position));
-        //}
+        if (Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            dis = (Vector2)transform.position - (mousePos = Camera.main.ScreenToWorldPoint(Input.GetTouch(1).position));
+        }
 
         targetPos = mousePos + dis;
         targetPos.x = Mathf.Clamp(targetPos.x, gameManager.MinPos.x, gameManager.MaxPos.x);
@@ -163,46 +163,54 @@ public class Player : MonoBehaviour
         if (isDead)
             yield break;
         isSlicing = true;
-        StopCoroutine(fire);
-        isFiring = false;
+        if (isFiring)
+        {
+            StopCoroutine(fire);
+            isFiring = false;
+        }
         audio.clip = playerClips[1];
         audio.Play();
-        GameObject aa = gameManager.Pooling(bulletPref[1], bulletPos.position, bulletPos.rotation);
-        aa.GetComponent<Animator>().Play("Drawing");
+        gameManager.Pooling(bulletPref[1], bulletPos.position, bulletPos.rotation);
         animator.Play("Slice");
         yield return new WaitForSeconds(mode == 0 ? 0.7f : 0.3f);
         animator.Play("Idle");
-        if(!isFiring)
+        if (!isDead)
+        {
             StartCoroutine(fire);
+            isFiring = true;
+        }
         isSlicing = false;
-        isFiring = true;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
+        if (isDead) return;
         if (collision.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
             StartCoroutine(UseItem(collision.tag));
             gameManager.Despawn(collision.gameObject);
             return;
         }
-        StartCoroutine(Damaged(collision, 0));
-        
+        if (collision.CompareTag("Bullet"))
+            gameManager.Despawn(collision.gameObject);
+
+        isDead = true;
+        gameManager.Dead();
+        StartCoroutine(Dead());
     }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        
-        if (isDead) return;
-        StartCoroutine(Damaged(collision, 0.5f));
-    }
+
     private IEnumerator Dead()
     {
-        isDead = true;
-        isFiring = false;
         animator.Play("Dead");
         audio.clip = playerClips[2];
         audio.Play();
-        StopCoroutine(fire);
+        if (isFiring)
+        {
+            StopCoroutine(fire);
+            isFiring = false;
+        }
+            
         scoreText.color = new Color(0.7f, 0, 0, 1);
         for(int i = 0; i < 5; i++)
         {
@@ -213,9 +221,11 @@ public class Player : MonoBehaviour
         }
         scoreText.color = new Color(0, 0, 0, 1);
         if (!isFiring)
+        {
             StartCoroutine(fire);
+            isFiring = true;
+        }
         isDead = false;
-        isFiring = true;
     }
 
     private IEnumerator UseItem(string item)
@@ -232,15 +242,5 @@ public class Player : MonoBehaviour
             dis = (Vector2)transform.position - mousePos;
 
         }
-    }
-
-    private IEnumerator Damaged(Collider2D collision, float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-        if (collision.CompareTag("Bullet"))
-            gameManager.Despawn(collision.gameObject);
-        if (isDead) yield break;
-        gameManager.Dead();
-        StartCoroutine(Dead());
     }
 }
