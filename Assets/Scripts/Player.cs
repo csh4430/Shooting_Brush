@@ -54,14 +54,14 @@ public class Player : MonoBehaviour
         }
 
         if(!gameManager.isMenu)
-        if (DoubleClicked() && !isSlicing && !isTurning && !isDead)
+        if ((DoubleClicked()) && (!isSlicing) && (!isTurning) && (!isDead))
         {
             StartCoroutine(Slash());
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetTouch(1).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Stationary)
         {
-            if (!isTurning && !boss.activeInHierarchy)
+            if ((!isSlicing && !isTurning) && (!boss.activeInHierarchy))
             {
                 StartCoroutine(Turn());
             }
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     }
     private void Move()
     {
-        if(Input.GetMouseButton(0))
+        if(Input.GetTouch(0).phase == TouchPhase.Moved)
             mousePos = Camera.main.ScreenToWorldPoint(/*Input.mousePosition*/ Input.GetTouch(0).position);
 
         if (Input.GetTouch(0).phase == TouchPhase.Began /*Input.GetMouseButtonDown(0)*/)
@@ -90,8 +90,11 @@ public class Player : MonoBehaviour
     }
     private IEnumerator Turn()
     {
-        StopCoroutine(fire);
-        isFiring = false;
+        if (isFiring)
+        {
+            StopCoroutine(fire);
+            isFiring = false;
+        }
         isTurning = true;
         for(int i = 0; i < 36; i++)
         {
@@ -99,14 +102,15 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         isTurning = false;
-        if (Input.GetMouseButton(1)) yield break;
         if (!isFiring)
+        {
             StartCoroutine(fire);
-        isFiring = true;
+            isFiring = true;
+        }
     }
     private bool DoubleClicked()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
         {
             float com = Time.time - lastPressed;
 

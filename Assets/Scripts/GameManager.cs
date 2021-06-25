@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     public PoolingManager poolingManager { get; private set; }
     private AudioSource audioManager = null;
-    private AudioListener audioListener = null;
+    private AudioSource[] audioMaster = null;
     private Shaking[] shaking = null;
     public Vector2 MaxPos { get; private set; }
     public Vector2 MinPos { get; private set; }
@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         sound = PlayerPrefs.GetInt("SOUND", 1);
-        audioListener = Camera.main.GetComponent<AudioListener>();
         audioManager = GetComponent<AudioSource>();
         languageCount = PlayerPrefs.GetInt("LANGUAGE");
         poolingManager = FindObjectOfType<PoolingManager>();
@@ -66,10 +65,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale == 1)
-            audioListener.enabled = sound == 1 ? true : false;
+        audioMaster = FindObjectsOfType<AudioSource>();
+        if (!isMenu)
+        {
+            for(int i = 0; i < audioMaster.Length; i ++)
+                audioMaster[i].enabled = sound == 1 ? true : false;
+
+        }
         else
-            audioListener.enabled = false;
+        {
+            for (int i = 0; i < audioMaster.Length; i++)
+                audioMaster[i].enabled = false;
+        }
         MaxPos = new Vector2(Camera.main.aspect * Camera.main.orthographicSize - 0.1f, Camera.main.orthographicSize - 1f);
         MinPos = new Vector2(-Camera.main.aspect * Camera.main.orthographicSize + 0.1f, -Camera.main.orthographicSize);
 
@@ -196,6 +203,8 @@ public class GameManager : MonoBehaviour
         menus[0].enabled = false;
         isMenu = false;
         Time.timeScale = 1;
+
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
     }
 
     public void ReStart()
@@ -203,6 +212,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Main");
         isMenu = false;
         Time.timeScale = 1;
+
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
     }
 
     public void Quit()
@@ -213,7 +224,8 @@ public class GameManager : MonoBehaviour
     public void Dead()
     {
         life--;
-        audioListener.enabled = false;
+        for (int i = 0; i < audioMaster.Length; i++)
+            audioMaster[i].enabled = false;
         StartCoroutine(shaking[0].Shake());
         StartCoroutine(shaking[1].Shake());
         if (score - 150 > 0)
